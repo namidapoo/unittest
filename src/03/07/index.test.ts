@@ -33,6 +33,8 @@ describe("非同期処理", () => {
 });
 
 test("指定時間待つと、経過時間をもって reject される", async () => {
+  // 1回のアサーションを期待する
+  // これがないと間違えてwait関数にしてしまったときに、catchブロックのアサーションが実行されなくてもテストが成功してしまう
   expect.assertions(1);
   try {
     await timeout(50); // timeout関数のつもりが、wait関数にしてしまった

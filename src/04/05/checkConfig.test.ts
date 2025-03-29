@@ -13,6 +13,8 @@ test("expect.objectContaining による部分検証", () => {
   const mockFn = jest.fn();
   checkConfig(mockFn);
   expect(mockFn).toHaveBeenCalledWith(
+    // 大きなオブジェクトの場合一部だけ検証もできる
+    // `expect.objectContaining` という補助関数を使う
     expect.objectContaining({
       feature: { spy: true },
     })

@@ -4,6 +4,12 @@ import { getMyArticlesData, httpError } from "../fetchers/fixtures";
 
 jest.mock("../fetchers");
 
+/**
+ * テストに必要なセットアップを、必要最小限のパラメータで切り替え可能にしたユーティリティ関数
+ * @param status HTTPステータスコード
+ * @returns {jest.SpyInstance} - Fetchers.getMyArticlesのモック
+ * @description ステータスコードに応じて、成功時はデータを返し、エラー時はHTTPエラーをスローします
+ */
 function mockGetMyArticles(status = 200) {
   if (status > 299) {
     return jest
@@ -36,6 +42,7 @@ test("指定したタグをもつ記事が一件以上ある場合、リンク�
   ]);
 });
 
+// 書籍にあったcatchを使った書き方
 test("データ取得に失敗した場合、reject される", async () => {
   mockGetMyArticles(500);
   await getMyArticleLinksByCategory("testing").catch((err) => {
@@ -43,4 +50,25 @@ test("データ取得に失敗した場合、reject される", async () => {
       err: { message: "internal server error" },
     });
   });
+});
+
+// rejects を使った書き方
+test("データ取得に失敗した場合、reject される", async () => {
+  mockGetMyArticles(500);
+  await expect(getMyArticleLinksByCategory("testing")).rejects.toMatchObject({
+    err: { message: "internal server error" },
+  });
+});
+
+// try-catch を使った書き方
+test("データ取得に失敗した場合、reject される", async () => {
+  expect.assertions(1);
+  mockGetMyArticles(500);
+  try {
+    await getMyArticleLinksByCategory("testing");
+  } catch (err) {
+    expect(err).toMatchObject({
+      err: { message: "internal server error" },
+    });
+  }
 });

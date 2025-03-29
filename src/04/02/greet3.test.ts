@@ -1,5 +1,8 @@
 import { greet, sayGoodBye } from "./greet";
 
+// 関数単位ではなくファイル単位でモックする
+// モックすると`undefined`を返すようになる
+// モックに実装を施したい場合は`jest.mock`の第二引数にオブジェクトを渡す
 jest.mock("./greet", () => ({
   sayGoodBye: (name: string) => `Good bye, ${name}.`,
 }));

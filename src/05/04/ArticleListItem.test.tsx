@@ -8,7 +8,10 @@ const item: ItemProps = {
 };
 
 test("ID に紐づいたリンクが表示される", () => {
+  // Arrange
+  // Act
   render(<ArticleListItem {...item} />);
+  // Assert
   expect(screen.getByRole("link", { name: "もっと見る" })).toHaveAttribute(
     "href",
     "/articles/howto-testing-with-typescript"
@@ -16,6 +19,9 @@ test("ID に紐づいたリンクが表示される", () => {
 });
 
 test("Snapshot: 一覧要素が表示される", () => {
+  // Arrange
+  // Act
   const { container } = render(<ArticleListItem {...item} />);
+  // Assert
   expect(container).toMatchSnapshot();
 });

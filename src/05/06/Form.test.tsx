@@ -55,6 +55,7 @@ async function clickSubmit() {
   );
 }
 
+// `mockFn`を通じて送信されたデータの内容を検証するためのヘルパー関数
 function mockHandleSubmit() {
   const mockFn = jest.fn();
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -69,31 +70,43 @@ function mockHandleSubmit() {
 
 describe("過去のお届け先がない場合", () => {
   test("お届け先入力欄がある", () => {
+    // Arrange
+    // Act
     render(<Form />);
+    // Assert
     expect(screen.getByRole("group", { name: "連絡先" })).toBeInTheDocument();
     expect(screen.getByRole("group", { name: "お届け先" })).toBeInTheDocument();
   });
 
-  test("入力・送信すると、入力内容が送信される", async () => {
-    const [mockFn, onSubmit] = mockHandleSubmit();
-    render(<Form onSubmit={onSubmit} />);
-    const contactNumber = await inputContactNumber();
-    const deliveryAddress = await inputDeliveryAddress();
-    await clickSubmit();
-    expect(mockFn).toHaveBeenCalledWith(
-      expect.objectContaining({ ...contactNumber, ...deliveryAddress })
-    );
-  });
+test("入力・送信すると、入力内容が送信される", async () => {
+  // Arrange
+  const [mockFn, onSubmit] = mockHandleSubmit();
+  render(<Form onSubmit={onSubmit} />);
+  const contactNumber = await inputContactNumber();
+  const deliveryAddress = await inputDeliveryAddress();
+  // Act
+  await clickSubmit();
+  // Assert
+  expect(mockFn).toHaveBeenCalledWith(
+    expect.objectContaining({ ...contactNumber, ...deliveryAddress })
+  );
+});
 
   test("Snapshot", () => {
+    // Arrange
+    // Act
     const { container } = render(<Form />);
+    // Assert
     expect(container).toMatchSnapshot();
   });
 });
 
 describe("過去のお届け先がある場合", () => {
   test("設問に答えるまで、お届け先を選べない", () => {
+    // Arrange
+    // Act
     render(<Form deliveryAddresses={deliveryAddresses} />);
+    // Assert
     expect(
       screen.getByRole("group", { name: "新しいお届け先を登録しますか？" })
     ).toBeInTheDocument();
@@ -103,14 +116,20 @@ describe("過去のお届け先がある場合", () => {
   });
 
   test("「いいえ」を選択・入力・送信すると、入力内容が送信される", async () => {
+    // Arrange
     const [mockFn, onSubmit] = mockHandleSubmit();
     render(<Form deliveryAddresses={deliveryAddresses} onSubmit={onSubmit} />);
+    // Act
     await user.click(screen.getByLabelText("いいえ"));
+    // Assert
     expect(
       screen.getByRole("group", { name: "過去のお届け先" })
     ).toBeInTheDocument();
+    // Arrange
     const inputValues = await inputContactNumber();
+    // Act
     await clickSubmit();
+    // Assert
     expect(mockFn).toHaveBeenCalledWith(expect.objectContaining(inputValues));
   });
 

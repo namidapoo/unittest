@@ -11,6 +11,12 @@ xtest("一覧要素が空の場合「投稿記事がありません」が表示�
   expect(screen.getByText("投稿記事がありません")).toBeInTheDocument();
 });
 
+// カバレッジレポートを見て不足してるテストを追加
+test("読み込み中の場合、「...loading」が表示される", () => {
+  render(<Articles items={[]} isLoading={true} />);
+  expect(screen.getByText("...loading")).toBeInTheDocument();
+});
+
 test("一覧要素がある場合、一覧が表示される", () => {
   const items = [
     { id: 1, title: "Testing Next.js" },

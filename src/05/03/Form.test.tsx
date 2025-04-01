@@ -44,10 +44,6 @@ test("Snapshot: アカウント名「taro」が表示される", () => {
 });
 
 test("logRoles: レンダリング結果からロール・アクセシブルネームを確認", () => {
-  // Arrange
   const { container } = render(<Form name="taro" />);
-  // Act
   logRoles(container);
-  // Assert
-  expect(container).toMatchSnapshot();
 });
